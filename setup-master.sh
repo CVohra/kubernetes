@@ -41,10 +41,6 @@ else
 	exit 1
 fi
 
-#yum install docker -y &>>$LOG
-#systemctl enable docker &>>$LOG
-#systemctl start docker  
-
 echo '[kubernetes]
 name=Kubernetes
 baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-$basearch
@@ -62,6 +58,7 @@ systemctl enable kubelet  &>/dev/null
 #Stat $? "Starting Kubelet Service"
 
 echo 'net.bridge.bridge-nf-call-ip6tables = 1
+net.ipv4.ip_forward = 1
 net.bridge.bridge-nf-call-iptables = 1' > /etc/sysctl.d/k8s.conf
 sysctl --system &>> $LOG
 Stat $? "Updating Network Configuration" 
@@ -73,7 +70,6 @@ Stat $? "Retarting Kubelet Service"
 
 sysctl net.bridge.bridge-nf-call-iptables=1 &>/dev/null 
 kubeadm init --pod-network-cidr=10.244.0.0/16 &>$LOG 
-STAT=$?
 Stat $? "Initializing Kubernetes Cluster"
 
 mkdir -p $HOME/.kube
