@@ -19,11 +19,11 @@ CheckSELinux
 CheckFirewall
 
 ## Setting Up Docker Repository.
-DockerCERepo
+#DockerCERepo
 
 ## Installing Docker
-yum install bind-utils docker-ce http://mirror.centos.org/centos/7/extras/x86_64/Packages/container-selinux-2.21-1.el7.noarch.rpm -y &>/dev/null
-#yum install docker -y
+#yum install bind-utils docker-ce http://mirror.centos.org/centos/7/extras/x86_64/Packages/container-selinux-2.21-1.el7.noarch.rpm -y &>/dev/null
+yum install docker -y &>>$LOG
 if [ $? -eq 0 ]; then  
 	success "Installed Docker-CE Successfully"
 else
@@ -40,10 +40,6 @@ else
 	error "Starting Docker Engine Failed"
 	exit 1
 fi
-
-#yum install docker -y &>>$LOG
-#systemctl enable docker &>>$LOG
-#systemctl start docker  
 
 echo '[kubernetes]
 name=Kubernetes
@@ -62,6 +58,7 @@ systemctl enable kubelet  &>/dev/null
 #Stat $? "Starting Kubelet Service"
 
 echo 'net.bridge.bridge-nf-call-ip6tables = 1
+net.ipv4.ip_forward = 1
 net.bridge.bridge-nf-call-iptables = 1' > /etc/sysctl.d/k8s.conf
 sysctl --system &>> $LOG
 Stat $? "Updating Network Configuration" 
