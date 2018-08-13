@@ -2,7 +2,7 @@
 
 # Kubernetes Node Setup
 
-LOG=/tmp/kube-master.log 
+LOG=/tmp/kube-node.log 
 rm -f $LOG
 
 ## Source Common Functions
